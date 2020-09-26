@@ -5,8 +5,7 @@ const IS ={
      PhoneNumber:"",
      UsernameError:"",
      EmailError:"",
-     PhoneNumberError:"",
-     x:""
+     PhoneNumberError:""
 }
 class FormV1 extends Component {
 	state=IS;
@@ -18,35 +17,9 @@ class FormV1 extends Component {
     	: event.target.value
     });
 	};
-	
 	validate = () =>{
-		let UsernameError="";
-     let EmailError="";
-     let PhoneNumberError="";
-     const regex= /^([0-9])+$/;
-     if(!this.state.Username)
+     if(this.state.EmailError||this.state.UsernameError||this.state.PhoneNumberError)
      {
-         UsernameError='Your username cannot be Empty';
-     }else if(this.state.Username.length<3){
-          UsernameError='Your username should be atleast 3 characters';
-     }
-     if(!this.state.Email.includes("@"))
-     {
-     	EmailError='Your Email is not Valid';
-     }
-     if(!this.state.PhoneNumber)
-     {
-         UsernameError='Your PhoneNumber cannot be Empty';
-     }else if(this.state.PhoneNumber.length<10)
-     {
-     	PhoneNumberError='Your PhoneNumber should have atleast 10 digits';
-     }else if(!regex.test(this.state.PhoneNumber))
-     {
-     	PhoneNumberError='Your PhoneNumber does not contain numbers';
-     }
-     if(EmailError||UsernameError||PhoneNumberError)
-     {
-     	this.setState({UsernameError,EmailError,PhoneNumberError});
      	return false;
      }
      return true;
@@ -57,37 +30,77 @@ class FormV1 extends Component {
       const isV= this.validate();
       if(isV){
       console.log(this.state);
-      this.setState(IS);this.x="blue";
+      this.setState(IS);
       alert("You have successfully submitted the form");
 
   }
 	};
-	
+  Forvalidate = event => {
+        let UsernameError="";
+        if(!this.state.Username)
+     {
+         UsernameError='Your username cannot be Empty';
+     }else if(this.state.Username.length<3){
+          UsernameError='Your username doesnot have atleast 3 characters';
+     }
+     this.setState({UsernameError});
+  };
+  Forvalidate1 = event => {
+        let EmailError="";
+        if(!this.state.Email)
+     {
+         EmailError='Your Email cannot be Empty';
+     }else if(!this.state.Email.includes("@"))
+     {
+      EmailError='Your Email is not Valid';
+     }
+     this.setState({EmailError});
+  };
+Forvalidate2 = event =>{
+   let PhoneNumberError="";
+  const regex= /^([0-9])+$/;
+  if(!this.state.PhoneNumber)
+     {
+         PhoneNumberError='Your PhoneNumber cannot be Empty';
+     }else if(this.state.PhoneNumber.length<10)
+     {
+      PhoneNumberError='Your PhoneNumber doesnot contain atleast 10 digits';
+     }else if(!regex.test(this.state.PhoneNumber))
+     {
+      PhoneNumberError='Your PhoneNumber doesnot contain numbers';
+     }
+     this.setState({PhoneNumberError});
+     
+};
+ForValidColor = () =>{
+if(this.state.Username && this.state.PhoneNumber && this.state.Email && this.state.UsernameError == "" && this.state.PhoneNumberError == "" && this.state.EmailError == "" )
+      {return true;}else{return false;}
+}
 	render()
 	{
 	   return(
      <form onSubmit={this.Forsubmit}>
      <div>
-     <p><label style={{color:this.x}}>Username: <input name="Username" placeholder="John" 
-            value={this.state.Username}
-            onChange={this.Forchange}
+     <p><label style={{color:this.ForValidColor()?"blue":"black"}}>Username: <input name="Username" placeholder="John" 
+            value={this.state.Username} 
+            onChange={this.Forchange} onBlur={this.Forvalidate}
       /></label></p>
       <div style={{color:"red",fontSize:15}}>
       {this.state.UsernameError}
       </div>
      </div>
      <div><p>
-     <label style={{color:this.x}}>Email ID : <input name="Email" placeholder="John@gmail.com" 
+     <label style={{color:this.ForValidColor()?"blue":"black"}}>Email ID : <input name="Email" placeholder="John@gmail.com" 
             value={this.state.Email}
-            onChange={this.Forchange}/></label></p>
+            onChange={this.Forchange} onBlur={this.Forvalidate1}/></label></p>
        <div style={{color:"red",fontSize:15}}>
       {this.state.EmailError}
       </div>
      </div>
      <div>
-     <p><label style={{color:this.x}}>PhoneNumber: <input name="PhoneNumber" placeholder="9848012345" 
+     <p><label style={{color:this.ForValidColor()?"blue":"black"}}>PhoneNumber: <input name="PhoneNumber" placeholder="9848012345" 
             value={this.state.PhoneNumber}
-            onChange={this.Forchange}/></label></p>
+            onChange={this.Forchange} onBlur={this.Forvalidate2} /></label></p>
        <div style={{color:"red",fontSize:15}}>
       {this.state.PhoneNumberError}
       </div>
