@@ -5,26 +5,30 @@ const IS ={
      PhoneNumber:"",
      UsernameError:"",
      EmailError:"",
-     PhoneNumberError:""
+     PhoneNumberError:"",
+     col:"orange"
 }
 class FormV1 extends Component {
 	state=IS;
 	Forchange = event => {
-    const makeC = event.target.type === "checkbox";
+    const makeC = event.target.type === "checkbox";let fun=event.target.name;
     this.setState({
     	[event.target.name]: makeC
     	?event.target.checked
-    	: event.target.value
-    });
+    	: event.target.value,col:"orange"
+    },()=>{if(fun==="Username")this.Forvalidate()
+    else if(fun==="Email")this.Forvalidate1()
+      else this.Forvalidate2()});
 	};
 	validate = () =>{
-     if(this.state.EmailError||this.state.UsernameError||this.state.PhoneNumberError)
-     {
+     
+     if(!this.state.Username||!this.state.Email||!this.state.PhoneNumber||this.state.EmailError||this.state.UsernameError||this.state.PhoneNumberError)
+     { this.Forvalidate1();this.Forvalidate2();this.Forvalidate();
+       this.setState({col:"red"});
      	return false;
      }
      return true;
 	}
-
 	Forsubmit = event => {
       event.preventDefault();
       const isV= this.validate();
@@ -73,7 +77,7 @@ Forvalidate2 = event =>{
      
 };
 ForValidColor = () =>{
-if(this.state.Username && this.state.PhoneNumber && this.state.Email && this.state.UsernameError == "" && this.state.PhoneNumberError == "" && this.state.EmailError == "" )
+if(this.state.Username && this.state.PhoneNumber && this.state.Email && !this.state.UsernameError && !this.state.PhoneNumberError&& !this.state.EmailError )
       {return true;}else{return false;}
 }
 	render()
@@ -83,25 +87,25 @@ if(this.state.Username && this.state.PhoneNumber && this.state.Email && this.sta
      <div>
      <p><label style={{color:this.ForValidColor()?"blue":"black"}}>Username: <input name="Username" placeholder="John" 
             value={this.state.Username} 
-            onChange={this.Forchange} onBlur={this.Forvalidate}
+            onChange={this.Forchange}
       /></label></p>
-      <div style={{color:"red",fontSize:15}}>
+      <div style={{color:this.state.col,fontSize:15}}>
       {this.state.UsernameError}
       </div>
      </div>
      <div><p>
      <label style={{color:this.ForValidColor()?"blue":"black"}}>Email ID : <input name="Email" placeholder="John@gmail.com" 
             value={this.state.Email}
-            onChange={this.Forchange} onBlur={this.Forvalidate1}/></label></p>
-       <div style={{color:"red",fontSize:15}}>
+            onChange={this.Forchange}/></label></p>
+       <div style={{color:this.state.col,fontSize:15}}>
       {this.state.EmailError}
       </div>
      </div>
      <div>
      <p><label style={{color:this.ForValidColor()?"blue":"black"}}>PhoneNumber: <input name="PhoneNumber" placeholder="9848012345" 
             value={this.state.PhoneNumber}
-            onChange={this.Forchange} onBlur={this.Forvalidate2} /></label></p>
-       <div style={{color:"red",fontSize:15}}>
+            onChange={this.Forchange}/></label></p>
+       <div style={{color:this.state.col,fontSize:15}}>
       {this.state.PhoneNumberError}
       </div>
      </div>
